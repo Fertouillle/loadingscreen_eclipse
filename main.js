@@ -280,3 +280,105 @@ setInterval(() => {
     pushLog(`Synchronisation : ${short}`, "line dim");
   }
 }, 120);
+
+/* ---------------------------
+   Audio (autoplay, sans interaction)
+   - UI long = ambiance loop très légère
+   - SFX3 = bips aléatoires (activité)
+   - SFX1_5s = burst rare (5 sec)
+---------------------------- */
+const BASE_URL = "https://TON_URL_ICI"; // ex: https://username.github.io/imp_loading
+
+const A = {
+  ok: false,
+  ambience: new Audio(`${BASE_URL}/audio/ui.mp3`),
+  sfx3: new Audio(`${BASE_URL}/audio/sfx3.mp3`),
+  sfx1: new Audio(`${BASE_URL}/audio/sfx1_5s.mp3`),
+};
+
+A.ambience.loop = true;
+A.ambience.preload = "auto";
+A.sfx3.preload = "auto";
+A.sfx1.preload = "auto";
+
+// Volumes (subtils)
+A.ambience.volume = 0.08; // très bas
+A.sfx3.volume = 0.18;
+A.sfx1.volume = 0.16;
+
+function safePlay(audio){
+  try{
+    audio.currentTime = 0;
+    const p = audio.play();
+    if(p && typeof p.catch === "function") p.catch(()=>{});
+    return true;
+  }catch(e){
+    return false;
+  }
+}
+
+// Anti-spam / anti-overlap
+let burstLock = false;
+
+async function tryStartAudio(){
+  if(A.ok) return;
+
+  // tentatives autoplay-friendly
+  A.ambience.muted = true;
+  try{
+    const p = A.ambience.play();
+    if(p && typeof p.then === "function"){
+      await p;
+    }
+  }catch(e){
+    return; // autoplay bloqué chez ce joueur -> silence (pas d'interaction possible)
+  }
+
+  A.ok = true;
+  A.ambience.muted = false;
+
+  // petit “ping” de démarrage
+  safePlay(A.sfx3);
+}
+
+// lancer plusieurs fois (certains CEF débloquent après quelques ticks)
+window.addEventListener("load", tryStartAudio);
+setTimeout(tryStartAudio, 800);
+setTimeout(tryStartAudio, 2000);
+setTimeout(tryStartAudio, 5000);
+
+// Boucle aléatoire (activité terminal)
+setInterval(() => {
+  if(!A.ok) return;
+
+  // Bips d’activité (SFX3) — discret
+  // ~9% toutes les 2.5s -> environ 1 bip/25-30s en moyenne (parfait)
+  if(Math.random() < 0.09) safePlay(A.sfx3);
+
+  // Burst rare (SFX1_5s) — jamais en même temps que SFX3
+  // ~2% toutes les 2.5s -> environ 1 burst / 2 minutes en moyenne
+  if(!burstLock && Math.random() < 0.02){
+    burstLock = true;
+    // Stoppe sfx3 pour éviter cacophonie
+    try{ A.sfx3.pause(); A.sfx3.currentTime = 0; }catch(e){}
+    safePlay(A.sfx1);
+    setTimeout(()=>{ burstLock = false; }, 5500);
+  }
+}, 2500);
+
+// Bonus: quand téléchargement “actif”, augmente un peu la fréquence des bips
+setInterval(() => {
+  if(!A.ok || burstLock) return;
+  const g = window.__gmod || {};
+  const total = g.total || 0;
+  const needed = g.needed || 0;
+  if(total > 0){
+    const done = Math.max(0, total - needed);
+    const pct = done / total;
+
+    // Entre 20% et 85%: un peu plus vivant
+    if(pct > 0.20 && pct < 0.85 && Math.random() < 0.12){
+      safePlay(A.sfx3);
+    }
+  }
+}, 3200);
