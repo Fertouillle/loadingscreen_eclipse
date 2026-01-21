@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Terminal Impérial</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="bg"></div>
+
+  <main class="wrap">
+    <section class="panel">
+      <header class="top">
+        <div class="title">
+          <span class="decor">=</span>
+          <h1>TERMINAL IMPÉRIAL</h1>
+          <span class="decor">=</span>
+        </div>
+
+        <div class="meta">
+          <div class="metaLine">
+            <span class="k">Température ext.</span>
+            <span class="v" id="temp">--°C</span>
+          </div>
+          <div class="metaLine">
+            <span class="k" id="gdateLabel">[CY-??.????.??]</span>
+            <span class="v" id="clock">--:--</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="sub">
+        <span class="subText" id="status">Connexion au réseau Militaire Impérial...</span>
+        <div class="bar"><div class="barFill" id="bar"></div></div>
+      </div>
+
+      <div class="grid">
+        <section class="left">
+          <div class="box">
+            <div class="boxInner" id="log"></div>
+          </div>
+          <div class="hint" id="lore">Analyse du flux de données...</div>
+        </section>
+
+        <aside class="right">
+          <div class="sideBlock">
+            <h2>STATUTS</h2>
+            <div class="kv"><span>Signal</span><b id="sig">STABLE</b></div>
+            <div class="kv"><span>Pression</span><b id="press">NORMALE</b></div>
+            <div class="kv"><span>Propulsion</span><b id="prop">OPTIMALE</b></div>
+          </div>
+
+          <div class="sideBlock">
+            <h2>SYSTÈMES DE BORD</h2>
+            <div class="kv"><span>Oxygène</span><b id="oxy">OK</b></div>
+            <div class="kv"><span>Énergie</span><b id="energy">98%</b></div>
+            <div class="kv"><span>Blindage</span><b id="armor">INTACT</b></div>
+            <div class="kv"><span>IA tactique</span><b id="ai">EN VEILLE</b></div>
+          </div>
+
+          <div class="sideBlock">
+            <h2>FLUX DE DONNÉES</h2>
+            <div class="dataBars">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="kv small"><span>ID Transport</span><b id="transport">TTR-6018</b></div>
+
+            <div class="lights">
+              <span class="light red" id="L_red"></span>
+              <span class="light amber" id="L_amber"></span>
+              <span class="light green" id="L_green"></span>
+            </div>
+
+          </div>
+        </aside>
+      </div>
+
+      <footer class="foot">
+        <div class="footLeft" id="footLeft">Tarkin inspecte la garnison centrale.</div>
+        <div class="footMid">⛓ Commandement Impérial — <span id="sector">Garnison Principale</span></div>
+        <div class="footRight" id="dl">Initialisation...</div>
+      </footer>
+    </section>
+  </main>
+
+  <script src="gmod.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
