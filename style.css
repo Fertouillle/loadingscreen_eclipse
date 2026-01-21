@@ -28,7 +28,7 @@ body{
 
   background:
     linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
-    url("bg/background.jpg") center center / cover no-repeat;
+    url("https://fertouillle.github.io/loadingscreen_eclipse/bg/background.jpg?v=7") center center / cover no-repeat;
 
   filter: blur(5px) saturate(0.95) brightness(0.95);
   transform: scale(1.05);
