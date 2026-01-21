@@ -23,13 +23,28 @@ body{
 }
 
 #bg{
-  position:fixed; inset:-40px;
+  position:fixed;
+  inset:-60px;
+
   background:
-    radial-gradient(600px 240px at 50% 60%, rgba(255,42,42,.10), transparent 70%),
-    linear-gradient(180deg, rgba(255,42,42,.05), transparent 35%),
-    radial-gradient(900px 700px at 50% 80%, rgba(0,0,0,.75), rgba(0,0,0,.95));
-  filter: blur(0px);
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url("bg/background.jpg") center center / cover no-repeat;
+
+  filter: blur(5px) saturate(0.95) brightness(0.95);
+  transform: scale(1.05);
 }
+
+
+#bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at center, rgba(0,0,0,0.15), rgba(0,0,0,0.65));
+  pointer-events:none;
+}
+
+
 
 .wrap{
   position:relative;
